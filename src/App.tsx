@@ -147,7 +147,6 @@ function GameScreen({ game }: { game: Alldle }) {
 			<HeaderBar
 				status={status}
 				isHighContrast={isHighContrast}
-				seed={game.seed}
 				setStatus={setStatus}
 				setShowEndScreen={setShowEndScreen}
 				resetGame={resetGame}
@@ -157,6 +156,7 @@ function GameScreen({ game }: { game: Alldle }) {
 				guesses={guesses}
 				targetWord={game.targetWord}
 				longestGuess={game.longestGuess}
+				seed={game.seed}
 				isValidWord={game.isValidWord}
 				guess={guess}
 			/>
@@ -178,7 +178,6 @@ function GameScreen({ game }: { game: Alldle }) {
 function HeaderBar({
 	status,
 	isHighContrast,
-	seed,
 	setStatus,
 	setShowEndScreen,
 	resetGame,
@@ -186,7 +185,6 @@ function HeaderBar({
 }: {
 	status: 'playing' | 'won' | 'lost',
 	isHighContrast: boolean,
-	seed: string,
 	setStatus: (status: 'playing' | 'won' | 'lost') => void,
 	setShowEndScreen: (status: 'won' | 'lost' | null) => void,
 	resetGame: () => void,
@@ -200,11 +198,6 @@ function HeaderBar({
 				<span>ALL</span>
 				<span>DLE</span>
 			</div>
-			{seed === 'daily' && (
-				<div className="daily-badge">
-					Daily Word
-				</div>
-			)}
 			<div className="btn-group">
 				{status === "playing"
 					? (

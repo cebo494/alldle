@@ -8,11 +8,12 @@ export interface AlldleProps {
 	guesses: GuessResult[];
 	targetWord: string;
 	longestGuess: number;
+	seed: string;
 	isValidWord: (word: string) => boolean;
 	guess: (word: string) => void;
 }
 
-export default function AlldleUI({ guesses, targetWord, longestGuess, isValidWord, guess }: AlldleProps) {
+export default function AlldleUI({ guesses, targetWord, longestGuess, seed, isValidWord, guess }: AlldleProps) {
 	const [currentGuess, _setCurrentGuess] = useState('');
 	const [cursor, setCursor] = useState(0);
 	const [isGuessInvalid, setIsGuessInvalid] = useState(false);
@@ -180,6 +181,11 @@ export default function AlldleUI({ guesses, targetWord, longestGuess, isValidWor
 	const displayGuess = currentGuess.padEnd(Math.max(longestGuess, cursor));
 
 	return (<>
+		{seed === 'daily' && (
+			<div className="daily-badge">
+				Daily Word
+			</div>
+		)}
 		{(guesses.length === 0 && displayGuess.length === 0) && (
 			<div>Guess a word</div>
 		)}

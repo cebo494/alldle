@@ -145,6 +145,7 @@ function GameScreen({ game }: { game: Alldle }) {
 	return (
 		<div className={`game-container ${isHighContrast ? 'high-contrast' : ''}`}>
 			<HeaderBar
+				game={game}
 				status={status}
 				setStatus={setStatus}
 				setShowEndScreen={setShowEndScreen}
@@ -174,6 +175,7 @@ function GameScreen({ game }: { game: Alldle }) {
 }
 
 function HeaderBar({
+	game,
 	status,
 	setStatus,
 	setShowEndScreen,
@@ -181,6 +183,7 @@ function HeaderBar({
 	isHighContrast,
 	setIsHighContrast
 }: {
+	game: Alldle,
 	status: 'playing' | 'won' | 'lost',
 	setStatus: (status: 'playing' | 'won' | 'lost') => void,
 	setShowEndScreen: (status: 'won' | 'lost' | null) => void,
@@ -188,7 +191,7 @@ function HeaderBar({
 	isHighContrast: boolean,
 	setIsHighContrast: (isHighContrast: boolean) => void
 }) {
-	const [showHelp, setShowHelp] = useState(false);
+	const [showPopup, setShowPopup] = useState('');
 
 	return (
 		<div className="header">
@@ -228,13 +231,16 @@ function HeaderBar({
 				}
 				<button
 					className="action-btn"
-					onClick={() => setShowHelp(true)}
+					onClick={() => setShowPopup('how to play')}
 				>
 					How to Play
 				</button>
-				{showHelp && (
-					<HowToPlay onClose={() => setShowHelp(false)} />
-				)}
+				<button
+					className="action-btn"
+					onClick={() => setShowPopup('dictionary')}
+				>
+					Dictionary
+				</button>
 				<button
 					className="action-btn"
 					onClick={() => setIsHighContrast(!isHighContrast)}
@@ -243,6 +249,67 @@ function HeaderBar({
 					<div className="color-swatch" data-state="correct"></div>
 					<div className="color-swatch" data-state="misplaced"></div>
 				</button>
+			</div>
+			{showPopup === 'how to play' && (
+				<HowToPlay onClose={() => setShowPopup('')} />
+			)}
+			{showPopup === 'dictionary' && (
+				<Dictionary game={game} onClose={() => setShowPopup('')} />
+			)}
+		</div>
+	)
+}
+
+function Dictionary({ game, onClose }: { game: Alldle, onClose: () => void }) {
+	const [list, setList] = useState<'guesses' | 'answers' | ''>('');
+	if (list === '') {
+		setTimeout(() => {
+			setList('guesses');
+		}, 100);
+	}
+	return (
+		<div className="modal-overlay" onClick={onClose} >
+			<div className="modal-content dictionary" onClick={e => e.stopPropagation()}>
+				<div>
+					<div className="modal-title">
+						Dictionary
+					</div>
+					<div className="btn-group">
+						<button
+							className="action-btn"
+							onClick={() => setList('guesses')}
+						>
+							Guesses
+						</button>
+						<button
+							className="action-btn"
+							onClick={() => setList('answers')}
+						>
+							Answers
+						</button>
+					</div>
+					{list === ''
+						? (
+							<div>Loading...</div>
+						)
+						: (
+							<div className="dictionary-list">
+								<ul>
+									{list === 'guesses' && (
+										game.wordList.map((word, i) => (
+											<li key={i}>{word}</li>
+										))
+									)}
+									{list === 'answers' && (
+										game.answersList.map((word, i) => (
+											<li key={i}>{word}</li>
+										))
+									)}
+								</ul>
+							</div>
+						)
+					}
+				</div>
 			</div>
 		</div>
 	)

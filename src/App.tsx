@@ -150,6 +150,7 @@ function GameScreen({ game }: { game: Alldle }) {
 				targetWord={game.targetWord}
 				longestGuess={game.longestGuess}
 				seed={game.seed}
+				disabled={status !== 'playing'}
 				isValidWord={game.isValidWord}
 				guess={guess}
 			/>

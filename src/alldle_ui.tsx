@@ -9,11 +9,12 @@ export interface AlldleProps {
 	targetWord: string;
 	longestGuess: number;
 	seed: string;
+	disabled: boolean;
 	isValidWord: (word: string) => boolean;
 	guess: (word: string) => void;
 }
 
-export default function AlldleUI({ guesses, targetWord, longestGuess, seed, isValidWord, guess }: AlldleProps) {
+export default function AlldleUI({ guesses, targetWord, longestGuess, seed, disabled, isValidWord, guess }: AlldleProps) {
 	const [currentGuess, _setCurrentGuess] = useState('');
 	const [cursor, setCursor] = useState(0);
 	const [isGuessInvalid, setIsGuessInvalid] = useState(false);
@@ -142,11 +143,12 @@ export default function AlldleUI({ guesses, targetWord, longestGuess, seed, isVa
 
 	// Init keyboard listener
 	useEffect(() => {
+		if (disabled) return;
 		window.addEventListener('keydown', onKeyDown);
 		return () => {
 			window.removeEventListener('keydown', onKeyDown);
 		}
-	}, [onKeyDown]);
+	}, [disabled, onKeyDown]);
 
 	// Auto Scroll
 	useEffect(() => {

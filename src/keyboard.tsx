@@ -34,29 +34,33 @@ export default function Keyboard({
 				<div key={i} className="keyboard-row">
 					{row.map(key => {
 						let className = "keyboard-key";
-						let onClick;
+						let action;
 						switch (key) {
 							case 'ENTER':
 								className += " wide";
-								onClick = submitGuess;
+								action = submitGuess;
 								break;
 							case 'BACKSPACE':
 								className += " wide";
-								onClick = deleteLetter;
+								action = deleteLetter;
 								break;
 							case 'SPACE':
 								className += " extra-wide";
-								onClick = () => typeLetter(' ');
+								action = () => typeLetter(' ');
 								break;
 							case '←':
-								onClick = () => moveCursor(-1);
+								action = () => moveCursor(-1);
 								break;
 							case '→':
-								onClick = () => moveCursor(1);
+								action = () => moveCursor(1);
 								break;
 							default:
-								onClick = () => typeLetter(key);
+								action = () => typeLetter(key);
 								break;
+						}
+						const onClick = (e: React.MouseEvent) => {
+							(e.currentTarget as HTMLButtonElement).blur();
+							action();
 						}
 						const state = getLetterState(key, correctLetters, misplacedLetters, absentLetters);
 						return (

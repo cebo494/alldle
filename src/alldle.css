@@ -9,9 +9,9 @@
 	--color-absent: #30363d;
 	--color-unused: #161b22;
 	--color-correct-normal: #238636;
-	--color-correct-contrast: #f5793a;
+	--color-correct-contrast: #bb6900;
 	--color-misplaced-normal: #d29922;
-	--color-misplaced-contrast: #85c0f9;
+	--color-misplaced-contrast: #7cafff;
 	--color-invalid: #f00;
 }
 
@@ -420,7 +420,6 @@ footer {
 [data-state='correct'] {
 	background-color: var(--color-correct);
 	transition: background-color 0.5s, color 0.5s;
-	color: var(--color-text-contrast);
 }
 
 [data-state='misplaced'] {

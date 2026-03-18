@@ -2,7 +2,7 @@
 let doLogging = false;
 console.log(
 	'To enable logging, type "toggleLogging()"\n',
-	"WARNING: This will reveal the answer when you start a new game! Don't Cheat!",
+	"WARNING: This will reveal the answer when you start a new game. Don't Cheat!",
 );
 declare global {
 	function toggleLogging(): void;

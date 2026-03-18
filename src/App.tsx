@@ -145,7 +145,6 @@ function GameScreen({ game }: { game: Alldle }) {
 	return (
 		<div className={`game-container ${isHighContrast ? 'high-contrast' : ''}`}>
 			<HeaderBar
-				game={game}
 				status={status}
 				setStatus={setStatus}
 				setShowEndScreen={setShowEndScreen}
@@ -175,7 +174,6 @@ function GameScreen({ game }: { game: Alldle }) {
 }
 
 function HeaderBar({
-	game,
 	status,
 	setStatus,
 	setShowEndScreen,
@@ -183,7 +181,6 @@ function HeaderBar({
 	isHighContrast,
 	setIsHighContrast
 }: {
-	game: Alldle,
 	status: 'playing' | 'won' | 'lost',
 	setStatus: (status: 'playing' | 'won' | 'lost') => void,
 	setShowEndScreen: (status: 'won' | 'lost' | null) => void,

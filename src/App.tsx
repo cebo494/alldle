@@ -229,7 +229,10 @@ function HeaderBar({
 				</button>
 				<button
 					className="action-btn"
-					onClick={() => setIsHighContrast(!isHighContrast)}
+					onClick={(e) => {
+						e.currentTarget.blur();
+						setIsHighContrast(!isHighContrast)
+					}}
 				>
 					Colors
 					<div className="color-swatch" data-state="correct"></div>

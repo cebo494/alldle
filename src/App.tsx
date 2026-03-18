@@ -123,9 +123,9 @@ function GameScreen({ game }: { game: Alldle }) {
 	}, [game, date]);
 
 	const resetGame = () => {
+		setStatus('playing');
 		setShowEndScreen(null);
 		game.reset();
-		setStatus('playing');
 		const newDate = dateString(new Date());
 		setDate(newDate);
 		setLocalStorageValue('alldle-load-state', JSON.stringify({
@@ -137,7 +137,7 @@ function GameScreen({ game }: { game: Alldle }) {
 	}
 
 	useEffect(() => {
-		if (status !== 'playing') {
+		if (status === 'won') {
 			setTimeout(() => setShowEndScreen(status), 1000);
 		}
 	}, [status]);

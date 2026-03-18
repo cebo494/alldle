@@ -1,4 +1,17 @@
 
+let doLogging = false;
+console.log(
+	'To enable logging, type "toggleLogging()"',
+	"WARNING: This will reveal the answer when you start a new game! Don't Cheat!",
+);
+declare global {
+	function toggleLogging(): void;
+}
+globalThis.toggleLogging = () => {
+	doLogging = !doLogging;
+	console.log(`Logging: ${doLogging}`);
+}
+
 export type LetterState = 'correct' | 'misplaced' | 'absent' | 'unused';
 
 export interface GuessResult {
@@ -15,7 +28,7 @@ export class Alldle {
 	public targetWord: string;
 	public guesses: GuessResult[];
 	public longestGuess: number;
-	public isDaily: boolean;
+	public seed: string;
 
 	constructor(wordList: string[], answersList: string[]) {
 		this.wordList = wordList;
@@ -23,7 +36,7 @@ export class Alldle {
 		this.targetWord = "";
 		this.guesses = [];
 		this.longestGuess = 0;
-		this.isDaily = false;
+		this.seed = "";
 
 		this.subscribe = this.subscribe.bind(this);
 		this.emitChange = this.emitChange.bind(this);
@@ -55,10 +68,11 @@ export class Alldle {
 	}
 
 	public reset() {
-		this.targetWord = this.answersList[Math.floor(Math.random() * this.answersList.length)];
+		const seed = Math.random();
+		this.targetWord = this.answersList[Math.floor(seed * this.answersList.length)];
+		this.seed = seed.toString();
 		this.longestGuess = 0;
 		this.guesses = [];
-		this.isDaily = false;
 		console.log(`Target Word: ${this.targetWord}`);
 		this.emitChange();
 	}

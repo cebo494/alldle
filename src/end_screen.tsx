@@ -5,6 +5,7 @@ export interface EndScreenProps {
 	targetWord: string,
 	guesses: GuessResult[],
 	isHighContrast: boolean,
+	seed: string,
 	onPlayAgain: () => void,
 	onClose: () => void
 }
@@ -14,6 +15,7 @@ export default function EndScreen({
 	targetWord,
 	guesses,
 	isHighContrast,
+	seed,
 	onPlayAgain,
 	onClose
 }: EndScreenProps) {
@@ -27,9 +29,9 @@ export default function EndScreen({
 	// const score = status === 'won' ? calculateScore() : 'N/A';
 	const score = calculateScore();
 
-	const generateEmojiGrid = () => {
+	const createGameSummary = () => {
 		const padding = guesses.reduce((max, g) => Math.max(max, g.word.length), 0).toString().length;
-		return guesses.map(g => {
+		const guessGrid = guesses.map(g => {
 			const emojiRow = g.result.map(res => {
 				if (res === 'correct') return isHighContrast ? '🟧' : '🟩';
 				if (res === 'misplaced') return isHighContrast ? '🟦' : '🟨';
@@ -39,13 +41,23 @@ export default function EndScreen({
 			return `[${g.word.length.toString().padStart(padding, ' ')}]${emojiRow}`;
 		})
 			.join('\n');
+
+		return (
+			"ALLDLE"
+			+ (seed === 'daily' ? " (Daily)" : ` `)
+			+ "\n"
+			+ (status === 'won' ? `${score} Tiles` : `FF (${score} Tiles)`)
+			+ "\n"
+			+ guessGrid
+			+ "\n"
+			+ "https://cebo494.github.io/alldle/"
+		);
 	};
 
-	const emojiGrid = generateEmojiGrid();
+	const summary = createGameSummary();
 
 	const copyToClipboard = () => {
-		const text = `ALLDLE\n${status === 'won' ? `${score}pts` : `FF (${score}pts)`}\n${emojiGrid}\nhttps://cebo494.github.io/alldle/`;
-		navigator.clipboard.writeText(text);
+		navigator.clipboard.writeText(summary);
 		alert('Copied to clipboard!');
 	};
 
@@ -60,7 +72,7 @@ export default function EndScreen({
 				</h2>
 
 				<div className="target-word">
-					The word was: <span>{targetWord}</span>
+					{seed === 'daily' ? "The Word of the Day was:" : 'The word was:'} <span>{targetWord}</span>
 				</div>
 
 				<div className="stats">
@@ -76,7 +88,7 @@ export default function EndScreen({
 
 				<div className="emoji-copy-container">
 					<div>
-						{emojiGrid}
+						{summary}
 					</div>
 				</div>
 

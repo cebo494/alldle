@@ -50,7 +50,7 @@ function setupGame(game: Alldle) {
 			lastPlayed: '',
 			playing: false,
 			targetWord: '',
-			guesses: []
+			guesses: [],
 		};
 
 	// If they're in the middle of a game, load it.
@@ -63,7 +63,7 @@ function setupGame(game: Alldle) {
 	const today = dateString(new Date());
 	if (lastPlayed !== today) {
 		game.loadGame(getDailyWord(game.answersList), []);
-		game.isDaily = true;
+		game.seed = 'daily';
 		return;
 	}
 
@@ -98,7 +98,7 @@ export default function App() {
 }
 
 function GameScreen({ game }: { game: Alldle }) {
-	const [date, setDate] = useState(dateString(new Date()));
+	const [gameStartedDate, setGameStartedDate] = useState(dateString(new Date()));
 	const guesses = useSyncExternalStore(game.subscribe, () => game.guesses);
 	const [status, setStatus] = useState<'playing' | 'won' | 'lost'>('playing');
 	const [showEndScreen, setShowEndScreen] = useState<'won' | 'lost' | null>(null);
@@ -115,19 +115,19 @@ function GameScreen({ game }: { game: Alldle }) {
 			setStatus('won');
 		}
 		setLocalStorageValue('alldle-load-state', JSON.stringify({
-			lastPlayed: date,
+			lastPlayed: gameStartedDate,
 			playing: !isWin,
 			targetWord: game.targetWord,
 			guesses: game.guesses
 		}));
-	}, [game, date]);
+	}, [game, gameStartedDate]);
 
 	const resetGame = () => {
 		setStatus('playing');
 		setShowEndScreen(null);
 		game.reset();
 		const newDate = dateString(new Date());
-		setDate(newDate);
+		setGameStartedDate(newDate);
 		setLocalStorageValue('alldle-load-state', JSON.stringify({
 			lastPlayed: newDate,
 			playing: true,
@@ -138,7 +138,7 @@ function GameScreen({ game }: { game: Alldle }) {
 
 	useEffect(() => {
 		if (status === 'won') {
-			setTimeout(() => setShowEndScreen(status), 1000);
+			setTimeout(() => setShowEndScreen(status), 500);
 		}
 	}, [status]);
 
@@ -146,10 +146,11 @@ function GameScreen({ game }: { game: Alldle }) {
 		<div className={`game-container ${isHighContrast ? 'high-contrast' : ''}`}>
 			<HeaderBar
 				status={status}
+				isHighContrast={isHighContrast}
+				seed={game.seed}
 				setStatus={setStatus}
 				setShowEndScreen={setShowEndScreen}
 				resetGame={resetGame}
-				isHighContrast={isHighContrast}
 				setIsHighContrast={setIsHighContrast}
 			/>
 			<AlldleUI
@@ -165,6 +166,7 @@ function GameScreen({ game }: { game: Alldle }) {
 					targetWord={game.targetWord}
 					guesses={guesses}
 					isHighContrast={isHighContrast}
+					seed={game.seed}
 					onPlayAgain={resetGame}
 					onClose={() => setShowEndScreen(null)}
 				/>
@@ -175,17 +177,19 @@ function GameScreen({ game }: { game: Alldle }) {
 
 function HeaderBar({
 	status,
+	isHighContrast,
+	seed,
 	setStatus,
 	setShowEndScreen,
 	resetGame,
-	isHighContrast,
 	setIsHighContrast
 }: {
 	status: 'playing' | 'won' | 'lost',
+	isHighContrast: boolean,
+	seed: string,
 	setStatus: (status: 'playing' | 'won' | 'lost') => void,
 	setShowEndScreen: (status: 'won' | 'lost' | null) => void,
 	resetGame: () => void,
-	isHighContrast: boolean,
 	setIsHighContrast: (isHighContrast: boolean) => void
 }) {
 	const [showPopup, setShowPopup] = useState('');
@@ -196,6 +200,11 @@ function HeaderBar({
 				<span>ALL</span>
 				<span>DLE</span>
 			</div>
+			{seed === 'daily' && (
+				<div className="daily-badge">
+					Daily Word
+				</div>
+			)}
 			<div className="btn-group">
 				{status === "playing"
 					? (

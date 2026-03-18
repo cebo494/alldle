@@ -7,8 +7,8 @@ import HowToPlay from "./how_to_play";
 import './alldle.css'
 import seedrandom from 'seedrandom';
 
-const WORD_LIST_PATH = '/cel_2-45.txt';
-const ANSWER_LIST_PATH = '/lemmas.txt';
+const WORD_LIST_PATH = new URL('/cel_2-45.txt', import.meta.url).href;
+const ANSWER_LIST_PATH = new URL('/lemmas.txt', import.meta.url).href;
 
 async function fetchDictionary(): Promise<string[]> {
 	const response = await fetch(WORD_LIST_PATH);

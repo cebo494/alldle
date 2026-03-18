@@ -1,7 +1,7 @@
 
 let doLogging = false;
 console.log(
-	'To enable logging, type "toggleLogging()"',
+	'To enable logging, type "toggleLogging()"\n',
 	"WARNING: This will reveal the answer when you start a new game! Don't Cheat!",
 );
 declare global {
@@ -10,6 +10,11 @@ declare global {
 globalThis.toggleLogging = () => {
 	doLogging = !doLogging;
 	console.log(`Logging: ${doLogging}`);
+}
+function log(message: string) {
+	if (doLogging) {
+		console.log(message);
+	}
 }
 
 export type LetterState = 'correct' | 'misplaced' | 'absent' | 'unused';
@@ -63,7 +68,7 @@ export class Alldle {
 		this.targetWord = targetWord;
 		this.guesses = guesses;
 		this.longestGuess = guesses.reduce((max, guess) => Math.max(max, guess.word.length), 0);
-		console.log(`Loaded Target Word: ${this.targetWord}`);
+		log(`Loaded Target Word: ${this.targetWord}`);
 		this.emitChange();
 	}
 
@@ -73,22 +78,22 @@ export class Alldle {
 		this.seed = seed.toString();
 		this.longestGuess = 0;
 		this.guesses = [];
-		console.log(`Target Word: ${this.targetWord}`);
+		log(`Target Word: ${this.targetWord}`);
 		this.emitChange();
 	}
 
 	public isValidWord(word: string): boolean {
 		const isValid = this.wordList.includes(word);
 		if (!isValid) {
-			console.log(`"${word}" is not a valid word`);
+			log(`"${word}" is not a valid word`);
 		}
 		return isValid;
 	}
 
 	public guess(word: string): GuessResult {
-		console.log(`Guessing "${word}"`);
+		log(`Guessing "${word}"`);
 		const result = this.evaluateWord(word);
-		console.log(`Result: ${result.result.map(r => {
+		log(`Result: ${result.result.map(r => {
 			switch (r) {
 				case 'correct':
 					return 'C';

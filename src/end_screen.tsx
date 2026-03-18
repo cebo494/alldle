@@ -44,7 +44,7 @@ export default function EndScreen({
 	const emojiGrid = generateEmojiGrid();
 
 	const copyToClipboard = () => {
-		const text = `ALLDLE\n${status === 'won' ? `${score}pts` : `FF (${score}pts)`}\n${emojiGrid}`;
+		const text = `ALLDLE\n${status === 'won' ? `${score}pts` : `FF (${score}pts)`}\n${emojiGrid}\nhttps://cebo494.github.io/alldle/`;
 		navigator.clipboard.writeText(text);
 		alert('Copied to clipboard!');
 	};

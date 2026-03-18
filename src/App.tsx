@@ -1,6 +1,6 @@
 import AlldleUI from "./alldle_ui";
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
-import { Alldle, type GuessResult } from "./alldle";
+import { Alldle, dateString, type GuessResult } from "./alldle";
 import EndScreen from "./end_screen";
 import { getLocalStorageValue, setLocalStorageValue, useLocalStorage } from "./storage";
 import HowToPlay from "./how_to_play";
@@ -20,13 +20,6 @@ async function fetchPossibleAnswers(): Promise<string[]> {
 	const response = await fetch(ANSWER_LIST_PATH);
 	const text = await response.text();
 	return text.split('\n').map(word => word.trim().toUpperCase());
-}
-
-function dateString(date: Date) {
-	const year = date.getUTCFullYear();
-	const month = date.getUTCMonth();
-	const day = date.getUTCDate();
-	return `${year}-${month}-${day}`;
 }
 
 function getDailyWord(answers: string[]) {

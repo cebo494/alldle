@@ -1,4 +1,4 @@
-import type { GuessResult } from "./alldle";
+import { dateString, type GuessResult } from "./alldle";
 
 export interface EndScreenProps {
 	status: 'won' | 'lost',
@@ -44,7 +44,7 @@ export default function EndScreen({
 
 		return (
 			"ALLDLE"
-			+ (seed === 'daily' ? " (Daily)" : ` `)
+			+ (seed === 'daily' ? (" Daily " + dateString(new Date())) : ` `)
 			+ "\n"
 			+ (status === 'won' ? `${score} Tiles` : `FF (${score} Tiles)`)
 			+ "\n"

@@ -48,6 +48,7 @@ export default function AlldleUI({ guesses, targetWord, longestGuess, seed, disa
 	}, [currentGuess, cursor, setCurrentGuess, setCursor]);
 
 	const backspace = useCallback(() => {
+		if (cursor === 0) return;
 		if (cursor === currentGuess.length) {
 			setCurrentGuess(currentGuess.slice(0, -1).trimEnd());
 		} else {
@@ -96,6 +97,7 @@ export default function AlldleUI({ guesses, targetWord, longestGuess, seed, disa
 		}
 
 		if (e.key === 'Delete') {
+			if (cursor >= currentGuess.length) return;
 			if (e.ctrlKey || e.metaKey) {
 				setCurrentGuess(
 					currentGuess.slice(0, cursor)
